@@ -147,7 +147,7 @@ export default class ReFlash extends React.Component{
                         setBin={this.setCardBin}/> :
                  <p>No Active Cards</p>}
 
-                <MyDeck cards={this.state.cards} setBin={this.setCardBin}/>
+                <MyDeck cards={this.state.cards} setBin={this.setCardBin} timeOuts={this.timeOuts}/>
             </div>
         )
 

@@ -24,7 +24,7 @@ export default class MyDeck extends React.Component{
 
         let i = -1
         cardList = this.props.cards.map( (el) => 
-            <ListCard key={el[0]} word={el[0]} def={el[1]} bin={el[2]} wrongs={el[3]} i={i+=1}/>
+            <ListCard key={el[0]} word={el[0]} def={el[1]} bin={el[2]} seen={el[3]} i={i+=1} timeOut={this.props.timeOuts[el[2]]}/>
         )
 
         return(
