@@ -36,3 +36,42 @@
     transform: rotate(360deg);
   }
 }
+
+.CardOuter{
+  background-color: #feffda;
+  width: 100vh;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size:xxx-large
+}
+
+.reFlash{
+  display: flex;
+  justify-content:space-around;
+  align-items:center;
+  flex-direction: column;
+  background-color: #b6c8ff;
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+.deck{
+  background-color: #b6c8ff;
+  overflow-y: scroll;
+}
+
+.deckCard{
+  background-color: #feffda;
+  width: 70vh;
+  height: 35vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size:large;
+  border-color: black;
+  border-style:double;
+}
