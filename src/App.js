@@ -14,7 +14,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount(){
-    fetch('http://34.221.166.60:3000').then(res => res.json()).then((result) => 
+    fetch('https://34.214.100.161:3000').then(res => res.json()).then((result) => 
       {
         this.setState({data:result[0], loading:false})
       })
