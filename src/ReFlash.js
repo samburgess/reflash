@@ -65,7 +65,7 @@ export default class ReFlash extends React.Component{
      
         e.preventDefault()
         let newMap = this.state.cards
-        newMap.push([this.state.tempWord, this.state.tempDef, 0, 0])
+        newMap.push([this.state.tempWord, this.state.tempDef, 0, 0, newMap.length])
         this.setState({cards:newMap})
 
     }
@@ -89,7 +89,7 @@ export default class ReFlash extends React.Component{
         let j = 0
         for(i=0; i<12; i++){
             for(j=0; j<activeCards.length; j++){
-                if(activeCards[j][2] == i){
+                if(activeCards[j][2] === i){
                     sortedActive.push(activeCards[j])
                 }
             }

@@ -11,7 +11,6 @@ export default class Card extends React.Component{
 
             flipped : false,
             bin : parseInt(props.bin),
-            lastWrong: parseInt(props.wrong)
         }
 
     }
