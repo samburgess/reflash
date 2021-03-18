@@ -16,7 +16,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount(){
-    fetch('https://34.214.100.161:3000').then(res => res.json()).then((result) => 
+    fetch('https://52.38.119.138:3000').then(res => res.json()).then((result) => 
       {
         this.setState({data:result, loading:false})
       })
@@ -43,7 +43,7 @@ export default class App extends React.Component {
   addUser = (e) =>{
 
     e.preventDefault()
-    axios.post('https://34.214.100.161:3000',  this.state.newUserIn )
+    axios.post('https://52.38.119.138:3000',  this.state.newUserIn )
       .then(res => {
         console.log(res);
         console.log(res.data);
