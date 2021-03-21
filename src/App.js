@@ -17,7 +17,7 @@ export default class App extends React.Component {
     newUserIn:""
   }
 
-  SERVER_ADDR = 'https://52.38.119.138:3000'
+  SERVER_ADDR = 'https://reflash-server.be:3000'
 
   componentDidMount(){
     fetch(this.SERVER_ADDR).then(res => res.json()).then((result) => 
