@@ -3,6 +3,8 @@ import './ReFlash.js'
 import ReFlash from './ReFlash.js';
 import React from 'react';
 import axios from 'axios';
+import https from 'https';
+import fs from 'fs';
 
 export default class App extends React.Component {
 
@@ -15,11 +17,27 @@ export default class App extends React.Component {
     newUserIn:""
   }
 
+  SERVER_ADDR = 'http://52.38.119.138:3000'
+
   componentDidMount(){
-    fetch('https://52.38.119.138:3000').then(res => res.json()).then((result) => 
+    fetch(this.SERVER_ADDR).then(res => res.json()).then((result) => 
       {
         this.setState({data:result, loading:false})
       })
+
+    // //rewrite using https package to allow use of ca signed cert
+    // var options = {
+    //   method:'GET',
+    //   ca: fs.readFileSync('ca-crt.pem')
+    // }
+
+    // var req = https.request(options, function(res) { 
+    //   res.on('data', function(result) { 
+    //     this.setState({data:result, loading:false})
+    //   })
+    // })
+
+    // req.end()
   }
 
   authUser = (e) => {
