@@ -17,27 +17,19 @@ export default class App extends React.Component {
     newUserIn:""
   }
 
+  //address of the public facing ec2 instance 
   SERVER_ADDR = 'https://reflash-server.be:3000'
 
   componentDidMount(){
+    this.getData()
+  }
+
+  //fetch data from server
+  getData = () =>{
     fetch(this.SERVER_ADDR).then(res => res.json()).then((result) => 
       {
         this.setState({data:result, loading:false})
       })
-
-    // //rewrite using https package to allow use of ca signed cert
-    // var options = {
-    //   method:'GET',
-    //   ca: fs.readFileSync('ca-crt.pem')
-    // }
-
-    // var req = https.request(options, function(res) { 
-    //   res.on('data', function(result) { 
-    //     this.setState({data:result, loading:false})
-    //   })
-    // })
-
-    // req.end()
   }
 
   authUser = (e) => {
@@ -61,10 +53,12 @@ export default class App extends React.Component {
   addUser = (e) =>{
 
     e.preventDefault()
-    axios.post('https://52.38.119.138:3000',  this.state.newUserIn )
+    axios.post(this.SERVER_ADDR,  this.state.newUserIn )
       .then(res => {
         console.log(res);
-        console.log(res.data);
+        this.getData()
+      }).catch(e => {
+        console.log("ERROR**   ", e)
       })
 
   }
