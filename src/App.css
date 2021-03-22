@@ -1,7 +1,6 @@
 .activeCard{
   width: 50%;
   border-style: solid;
-  border-color: chocolate;
 }
 
 .deck{
@@ -13,7 +12,6 @@
 }
 
 .cardAdd{
-  border-style: solid;
   display: flex;
   flex-direction: column;
 }
