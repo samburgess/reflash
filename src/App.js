@@ -58,16 +58,24 @@ export default class App extends React.Component {
 
     e.preventDefault()
 
-    let payload = JSON.stringify(['new user', '', this.state.newUserIn])
+    let userIn = this.state.newUserIn
 
-    axios.post(this.SERVER_ADDR,  payload)
-        .then(res => {
-            console.log(res);
-        }).catch(e => {
-            console.log("ERROR**   ", e)
+    this.setState({loading:true}, () => {
+      let payload = JSON.stringify(['new user', '', userIn])
+
+      axios.post(this.SERVER_ADDR,  payload)
+          .then(res => {
+              console.log(res)
+              this.getData()
+              alert("new user ",userIn, " added. You may now log in.")
+          }).catch(e => {
+              console.log("ERROR**   ", e)
+      })
+
     })
 
-    this.getData()
+
+
 
   }
 
