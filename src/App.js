@@ -67,7 +67,7 @@ export default class App extends React.Component {
           .then(res => {
               console.log(res)
               this.getData()
-              alert("new user ",userIn, " added. You may now log in.")
+              alert("new user added. You may now log in.")
           }).catch(e => {
               console.log("ERROR**   ", e)
       })
