@@ -73,10 +73,6 @@ export default class App extends React.Component {
       })
 
     })
-
-
-
-
   }
 
 
@@ -84,19 +80,24 @@ export default class App extends React.Component {
     // display login if not authed else reflash
 
     return (
-      <div>
+      <div className="App">
+        <h1>ReFlash: Spatial Memory Training</h1>
         {this.state.loading ? <p>Loading ... </p> : (this.state.authed ? <ReFlash data={this.state.data} SERVER_ADDR={this.SERVER_ADDR}/> :
-          <div>
-            Existing User Login: 
-            <form>
-              <input placeholder="username" onChange={e => this.setState({userIn:e.target.value})}/>
-              <input type="submit" onClick={(e) => this.authUser(e)}/>
-            </form>
-            New User Sign Up:
-            <form>
-              <input placeholder="new username" onChange={e => this.setState({newUserIn:e.target.value})}/>
-              <input type="submit" onClick={(e) => this.addUser(e)}/>
-            </form>
+          <div className="LoginContainer">
+            <div>
+              <h2>Existing User Login:</h2>
+              <form >
+                <input className="LoginForm" placeholder="username" onChange={e => this.setState({userIn:e.target.value})}/>
+                <input className="LoginForm" type="submit" onClick={(e) => this.authUser(e)}/>
+              </form>
+            </div>
+            <div>
+              <h2>New User Sign Up:</h2>
+              <form>
+                <input className="LoginForm" placeholder="new username" onChange={e => this.setState({newUserIn:e.target.value})}/>
+                <input className="LoginForm" type="submit" onClick={(e) => this.addUser(e)}/>
+              </form>
+            </div>
           </div>
         )}
       </div>

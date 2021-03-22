@@ -12,7 +12,7 @@ export default class Card extends React.Component{
             bin : parseInt(props.bin),
             lastSeen: props.seen,
             i:props.i,
-            nextApp:-1
+            nextApp:null
         }
 
     }

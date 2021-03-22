@@ -50,7 +50,7 @@ export default class MyDeck extends React.Component{
         return(
 
             <div className='deck' key={this.props.cards}>
-                <h1 onClick = {e => this.toggle(e)}> See My Cards \/</h1>
+                <h1 onClick = {e => this.toggle(e)}> Click to see cards</h1>
                 {this.state.open ? cardList : null}
             </div>
 

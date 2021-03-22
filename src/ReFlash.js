@@ -12,7 +12,8 @@ export default class ReFlash extends React.Component{
             cards: this.props.data[1],  //user cards
             tempWord: "",
             tempDef: "",
-            activeCards : []
+            activeCards : [],
+            permaDone: false
         }
 
         this.user = this.props.data[0] //username
@@ -44,6 +45,14 @@ export default class ReFlash extends React.Component{
 
             if(this.state.activeCards.length === 0){
                 this.genActiveCards()
+                //check if permadone
+                let i;
+                for(i=0; i < this.state.cards.length; i++){
+                    if(this.state.cards[i][2] < 11){
+                        this.setState({permaDone:true})
+                        break
+                    }
+                }
             }
             
         }, 1000)
@@ -103,8 +112,8 @@ export default class ReFlash extends React.Component{
         let sortedActive = []
         i = 0
         let j = 0
-        //ascending order 1-11
-        for(i=1; i<12; i++){
+        //ascending order 1-10 (bin 11 never goes in active deck, 0 always goes on end)
+        for(i=1; i<11; i++){
             for(j=0; j<activeCards.length; j++){
                 if(activeCards[j][2] === i){
                     sortedActive.push(activeCards[j])
@@ -132,6 +141,9 @@ export default class ReFlash extends React.Component{
         }
         if(isWrong){
             newCards[i][4] += 1
+            if (newCards[i][4] > 9){    //hard to remember
+                newCards[i][2] = 11
+            }
         }
         this.setState({cards:newCards})
         this.genActiveCards()
@@ -144,7 +156,7 @@ export default class ReFlash extends React.Component{
 
         axios.post(this.SERVER_ADDR,  payload)
             .then(res => {
-                console.log(res);
+                //console.log(res);
             }).catch(e => {
                 console.log("ERROR**   ", e)
         })
@@ -156,23 +168,27 @@ export default class ReFlash extends React.Component{
         return(
 
             <div className='reFlash'>
-                <h1>ReFlash: Spatial Memory Training</h1>
-                <form>
+                <form className="cardAdd">
                     <h2>Add a card</h2>
                     <input placeholder="word" onChange={e => this.setState({tempWord:e.target.value})} />
                     <input placeholder="definition" onChange={e => this.setState({tempDef:e.target.value})}/>
                     <input type="submit" onClick ={e => this.addCard(e)}/>
                 </form>
-                {this.state.activeCards.length > 0 ?
-                    <Card
-                        word={this.state.activeCards[0][0]}
-                        def={this.state.activeCards[0][1]}
-                        bin={this.state.activeCards[0][2]}
-                        i={this.state.activeCards[0][5]}
-                        setBin={this.setCardBin}/> :
-                <p>You are temporarily done; please come back later to review more words.</p>}
+                <div className="activeCard">
+                    {this.state.activeCards.length > 0 ?
+                        <Card
+                            word={this.state.activeCards[0][0]}
+                            def={this.state.activeCards[0][1]}
+                            bin={this.state.activeCards[0][2]}
+                            i={this.state.activeCards[0][5]}
+                            setBin={this.setCardBin}/> :
+                        this.state.permaDone ?
+                            <p>You are temporarily done; please come back later to review more words.</p> : 
+                            <p>you have no more words to review; you are permanently done!</p>
+                    }
+                </div>
 
-                <MyDeck cards={this.state.cards} timeOuts={this.timeOuts}/>
+                <MyDeck className="deck" cards={this.state.cards} timeOuts={this.timeOuts}/>
             </div>
         )
 
