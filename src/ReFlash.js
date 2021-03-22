@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from './components/Card.js'
 import MyDeck from './components/MyDeck'
+import axios from 'axios'
 
 export default class ReFlash extends React.Component{
 
@@ -8,12 +9,14 @@ export default class ReFlash extends React.Component{
         super(props)
         this.state = {
 
-            user: "",
-            cards: this.props.data[1],
+            cards: this.props.data[1],  //user cards
             tempWord: "",
             tempDef: "",
             activeCards : []
         }
+
+        this.user = this.props.data[0] //username
+
         this.timeOuts = new Map()
         this.timeOuts[0] = 0
         this.timeOuts[1] = 5
@@ -28,6 +31,7 @@ export default class ReFlash extends React.Component{
         this.timeOuts[10] = 1.051e+7 //4 months
         this.timeOuts[11] = Infinity
 
+        this.SERVER_ADDR=this.props.SERVER_ADDR
     }
 
     componentDidMount(){
@@ -65,8 +69,20 @@ export default class ReFlash extends React.Component{
      
         e.preventDefault()
         let newMap = this.state.cards
-        newMap.push([this.state.tempWord, this.state.tempDef, 0, 0, newMap.length])
-        this.setState({cards:newMap})
+        //check if word already in cards
+        let i;
+        for(i=0; i < this.state.cards.length; i++){
+            if( this.state.cards[i][0] === this.state.tempWord){
+                alert("Word already in deck")
+                return;
+            }
+        }
+
+        newMap.push([this.state.tempWord, this.state.tempDef, 0, 0, 0, newMap.length])
+
+        this.setState({cards:newMap}, () =>{
+            this.postNewCards()
+        })
 
     }
 
@@ -87,41 +103,51 @@ export default class ReFlash extends React.Component{
         let sortedActive = []
         i = 0
         let j = 0
-        for(i=0; i<12; i++){
+        //ascending order 1-11
+        for(i=1; i<12; i++){
             for(j=0; j<activeCards.length; j++){
                 if(activeCards[j][2] === i){
                     sortedActive.push(activeCards[j])
                 }
             }
         }
+        //append 0 bucket to end
+        for(j=0; j<activeCards.length; j++){
+            if(activeCards[j][2] === 0){
+                sortedActive.push(activeCards[j])
+            }
+        }
 
-        this.setState({activeCards:sortedActive})
+        this.setState({activeCards:sortedActive}, () =>{
+            this.postNewCards()
+        })
     }
 
-    testCards = () => {
-
-        //card schema: [word, definition, bin, date of last wrong]
-
-        let newMap = this.state.cards
-        newMap.push(['sam', 'a pretty cool guy', 0, 0])
-        newMap.push(['car', 'four wheeled vehicle', 0, 0])
-        newMap.push(['bike', 'two wheeled vehicle', 0, 0])
-        newMap.push(['javascript', 'web based shenanigans', 0, 0])
-        newMap.push(['python', 'fancy psuedocode', 0, 0])
-        newMap.push(['sun', 'fire in the sky', 0, 0])
-
-        this.setState({cards:newMap})
-    }
-
-    setCardBin = (i, n, wrong=-1) => {
+    setCardBin = (i, n, timeAns=-1, isWrong=false) => {
 
         let newCards = this.state.cards
         newCards[i][2] = n //set bucket
-        if(wrong>0){
-            newCards[i][3] = wrong
+        if(timeAns>0){
+            newCards[i][3] = timeAns
+        }
+        if(isWrong){
+            newCards[i][4] += 1
         }
         this.setState({cards:newCards})
         this.genActiveCards()
+
+
+    }
+
+    postNewCards = () =>{
+        let payload = JSON.stringify(['new cards', this.user, this.state.cards])
+
+        axios.post(this.SERVER_ADDR,  payload)
+            .then(res => {
+                console.log(res);
+            }).catch(e => {
+                console.log("ERROR**   ", e)
+        })
 
     }
 
@@ -142,12 +168,11 @@ export default class ReFlash extends React.Component{
                         word={this.state.activeCards[0][0]}
                         def={this.state.activeCards[0][1]}
                         bin={this.state.activeCards[0][2]}
-                        wrongs={this.state.activeCards[0][3]} 
-                        i={this.state.activeCards[0][4]}
+                        i={this.state.activeCards[0][5]}
                         setBin={this.setCardBin}/> :
-                 <p>No Active Cards</p>}
+                <p>You are temporarily done; please come back later to review more words.</p>}
 
-                <MyDeck cards={this.state.cards} setBin={this.setCardBin} timeOuts={this.timeOuts}/>
+                <MyDeck cards={this.state.cards} timeOuts={this.timeOuts}/>
             </div>
         )
 

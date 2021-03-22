@@ -3,8 +3,6 @@ import './ReFlash.js'
 import ReFlash from './ReFlash.js';
 import React from 'react';
 import axios from 'axios';
-import https from 'https';
-import fs from 'fs';
 
 export default class App extends React.Component {
 
@@ -14,7 +12,7 @@ export default class App extends React.Component {
     loading:true,
     authed:false,
     userIn:"",
-    newUserIn:""
+    newUserIn:"",
   }
 
   //address of the public facing ec2 instance 
@@ -22,6 +20,13 @@ export default class App extends React.Component {
 
   componentDidMount(){
     this.getData()
+  }
+
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state,callback)=>{
+        return;
+    };
   }
 
   //fetch data from server
@@ -39,7 +44,6 @@ export default class App extends React.Component {
     var i;
     let found = false
     for(i=0; i<this.state.data.length; i++){
-      console.log(this.state.data[i][0])
       if(this.state.data[i][0] === this.state.userIn){
         this.setState({data:this.state.data[i], authed:true})
         found = true
@@ -53,13 +57,17 @@ export default class App extends React.Component {
   addUser = (e) =>{
 
     e.preventDefault()
-    axios.post(this.SERVER_ADDR,  this.state.newUserIn )
-      .then(res => {
-        console.log(res);
-        this.getData()
-      }).catch(e => {
-        console.log("ERROR**   ", e)
-      })
+
+    let payload = JSON.stringify(['new user', '', this.state.newUserIn])
+
+    axios.post(this.SERVER_ADDR,  payload)
+        .then(res => {
+            console.log(res);
+        }).catch(e => {
+            console.log("ERROR**   ", e)
+    })
+
+    this.getData()
 
   }
 
@@ -69,7 +77,7 @@ export default class App extends React.Component {
 
     return (
       <div>
-        {this.state.loading ? <p>Loading ... </p> : (this.state.authed ? <ReFlash data={this.state.data}/> :
+        {this.state.loading ? <p>Loading ... </p> : (this.state.authed ? <ReFlash data={this.state.data} SERVER_ADDR={this.SERVER_ADDR}/> :
           <div>
             Existing User Login: 
             <form>

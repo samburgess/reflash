@@ -1,6 +1,15 @@
 import React from 'react';
 import '../App.css'
 
+/**
+ * Card schema:
+ * [word, definition, bucket, timestamp of last answer, number of wrong answers, index]
+ * 
+ * 
+ * 
+ */
+
+
 export default class Card extends React.Component{
 
     constructor(props){
@@ -15,6 +24,13 @@ export default class Card extends React.Component{
 
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
 
     flip = () =>{
         this.setState({flipped: this.state.flipped ? false : true})
@@ -27,7 +43,7 @@ export default class Card extends React.Component{
 
     notIt = () => {
         this.setState({flipped:false})
-        this.props.setBin(this.props.i, 1, Date.now())
+        this.props.setBin(this.props.i, 1, Date.now(), true)
     }
 
 

@@ -25,6 +25,13 @@ export default class Card extends React.Component{
         }, 1000)
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
 
     flip = () =>{
         this.setState({flipped: this.state.flipped ? false : true})
@@ -39,6 +46,7 @@ export default class Card extends React.Component{
                 <p>{this.state.flipped ? this.props.def : this.props.word}</p>
                 <p>bin: {this.state.bin}</p>
                 <p>Time to next appearance: {this.state.nextApp} Seconds</p>
+                <p>Number of times answered incorrectly: {this.props.wrongs}</p>
                 <button onClick = {this.flip}>Flip Card</button>
             </div>
         )
